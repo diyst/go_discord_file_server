@@ -33,4 +33,4 @@ If you never created a discord bot follow [this tutorial](https://medium.com/@ms
 4. Run the application
     ```bash
     go run main.go
-    ```go run main.go
+    ```
