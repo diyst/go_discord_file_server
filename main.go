@@ -10,18 +10,24 @@ import (
 	"os/signal"
 
 	bot "go_discord_file_server/services"
+
+	"github.com/rs/cors"
 )
 
 func main() {
 	config.LoadConfig()
 
-	http.HandleFunc("/uploadImage", handlers.ImageUploadHandler)
-	http.HandleFunc("/getImage", handlers.ImageGetHandler)
-	http.HandleFunc("/deleteImage", handlers.ImageDeleteHandler)
+	mux := http.NewServeMux()
+
+	handler := cors.AllowAll().Handler(mux)
+
+	mux.HandleFunc("/uploadImage", handlers.ImageUploadHandler)
+	mux.HandleFunc("/getImage", handlers.ImageGetHandler)
+	mux.HandleFunc("/deleteImage", handlers.ImageDeleteHandler)
 
 	port := config.GetEnv("PORT", "8080")
 
-	server := &http.Server{Addr: ":" + port}
+	server := &http.Server{Addr: ":" + port, Handler: handler}
 	go func() {
 		log.Printf("Starting server on port %s\n", port)
 		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
