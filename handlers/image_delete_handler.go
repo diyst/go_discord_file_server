@@ -11,8 +11,6 @@ func ImageDeleteHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	r.URL.Query()
-
 	err := services.DeleteImage(r.URL.Query().Get("msgId"))
 
 	if err != nil {
